@@ -18,12 +18,12 @@ func (r *mutationResolver) CreateCustomizedProduct(ctx context.Context, input mo
 
 // Products is the resolver for the products field.
 func (r *queryResolver) Products(ctx context.Context) ([]*model.Product, error) {
-	panic(fmt.Errorf("not implemented: Products - products"))
+	return r.products, nil
 }
 
 // Product is the resolver for the product field.
 func (r *queryResolver) Product(ctx context.Context, id string) (*model.Product, error) {
-	panic(fmt.Errorf("not implemented: Product - product"))
+	return r.products[0], nil
 }
 
 // Mutation returns MutationResolver implementation.
