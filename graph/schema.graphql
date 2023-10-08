@@ -20,6 +20,7 @@ enum ProductType {
 }
 
 enum ProductSize {
+  XS
   S
   M
   L
@@ -55,8 +56,10 @@ type Query {
 }
 
 input NewCustomizedProduct {
+  productId: String!
   text: String!
   userId: String!
+  images: [String!]!
 }
 
 type Mutation {
