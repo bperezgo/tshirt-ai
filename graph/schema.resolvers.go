@@ -6,9 +6,11 @@ package graph
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/bperezgo/tshirt_ai/graph/model"
+	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
 // CreateCustomizedProduct is the resolver for the createCustomizedProduct field.
@@ -18,12 +20,64 @@ func (r *mutationResolver) CreateCustomizedProduct(ctx context.Context, input mo
 
 // Products is the resolver for the products field.
 func (r *queryResolver) Products(ctx context.Context) ([]*model.Product, error) {
-	return r.products, nil
+	domainProducts, err := r.productsRepository.FindAll()
+
+	if err != nil {
+		return nil, gqlerror.Errorf("domainProducts not found error")
+	}
+
+	modelProducts := []*model.Product{}
+
+	for _, domainProduct := range domainProducts {
+		modelProduct := &model.Product{
+			ID:    domainProduct.ID,
+			Title: domainProduct.Title,
+			Description: &model.Description{
+				Short: domainProduct.Description,
+				Long:  domainProduct.Description,
+				HTML:  domainProduct.Description,
+			},
+			Price:  domainProduct.Price,
+			Images: domainProduct.Images,
+		}
+
+		modelProducts = append(modelProducts, modelProduct)
+	}
+
+	return modelProducts, nil
 }
 
 // Product is the resolver for the product field.
 func (r *queryResolver) Product(ctx context.Context, id string) (*model.Product, error) {
-	return r.products[0], nil
+	domainProducts, err := r.productsRepository.FindAll()
+
+	if err != nil {
+		return nil, err
+	}
+
+	for _, domainProduct := range domainProducts {
+		if domainProduct.ID == id {
+			return &model.Product{
+				ID:    domainProduct.ID,
+				Title: domainProduct.Title,
+				Description: &model.Description{
+					Short: domainProduct.Description,
+					Long:  domainProduct.Description,
+					HTML:  domainProduct.Description,
+				},
+				Price:  domainProduct.Price,
+				Images: domainProduct.Images,
+			}, nil
+		}
+	}
+
+	return nil, &gqlerror.Error{
+		Err:     errors.New("product not found error"),
+		Message: "product not found error",
+		Extensions: map[string]interface{}{
+			"code": "404",
+		},
+	}
 }
 
 // Mutation returns MutationResolver implementation.
