@@ -3545,13 +3545,22 @@ func (ec *executionContext) unmarshalInputNewCustomizedProduct(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"text", "userId"}
+	fieldsInOrder := [...]string{"productId", "text", "userId", "images"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
 			continue
 		}
 		switch k {
+		case "productId":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("productId"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ProductID = data
 		case "text":
 			var err error
 
@@ -3570,6 +3579,15 @@ func (ec *executionContext) unmarshalInputNewCustomizedProduct(ctx context.Conte
 				return it, err
 			}
 			it.UserID = data
+		case "images":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("images"))
+			data, err := ec.unmarshalNString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Images = data
 		}
 	}
 

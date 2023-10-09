@@ -1,9 +1,9 @@
 // This module is temporal, while I switch the in memory repository to the database repository.
 package repositories
 
-import "github.com/bperezgo/tshirt_ai/internal/domain"
+import "github.com/bperezgo/tshirt_ai/internal/domain/entities"
 
-var products_data = []*domain.Product{
+var products_data = []*entities.Product{
 	{
 		ID:          "1",
 		Title:       "T-Shirt 1",

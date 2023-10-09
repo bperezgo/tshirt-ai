@@ -21,8 +21,10 @@ type Description struct {
 }
 
 type NewCustomizedProduct struct {
-	Text   string `json:"text"`
-	UserID string `json:"userId"`
+	ProductID string   `json:"productId"`
+	Text      string   `json:"text"`
+	UserID    string   `json:"userId"`
+	Images    []string `json:"images"`
 }
 
 type Product struct {
@@ -51,6 +53,7 @@ type User struct {
 type ProductSize string
 
 const (
+	ProductSizeXs ProductSize = "XS"
 	ProductSizeS  ProductSize = "S"
 	ProductSizeM  ProductSize = "M"
 	ProductSizeL  ProductSize = "L"
@@ -58,6 +61,7 @@ const (
 )
 
 var AllProductSize = []ProductSize{
+	ProductSizeXs,
 	ProductSizeS,
 	ProductSizeM,
 	ProductSizeL,
@@ -66,7 +70,7 @@ var AllProductSize = []ProductSize{
 
 func (e ProductSize) IsValid() bool {
 	switch e {
-	case ProductSizeS, ProductSizeM, ProductSizeL, ProductSizeXl:
+	case ProductSizeXs, ProductSizeS, ProductSizeM, ProductSizeL, ProductSizeXl:
 		return true
 	}
 	return false

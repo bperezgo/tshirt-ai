@@ -1,8 +1,8 @@
 package graph
 
 import (
+	"github.com/bperezgo/tshirt_ai/internal/domain/services"
 	"github.com/bperezgo/tshirt_ai/internal/platform/repositories"
-	"github.com/bperezgo/tshirt_ai/internal/ports"
 )
 
 // This file will not be regenerated automatically.
@@ -10,14 +10,19 @@ import (
 // It serves as dependency injection for your app, add any dependencies you require here.
 
 type Resolver struct {
-	productsRepository ports.ProductsRepository
+	productsService           services.ProductService
+	customizedProductsService services.CustomizedProductService
 }
 
 func NewResolver() *Resolver {
 	productsRepository := repositories.NewInMemoryProductsRepository()
-	// customizedProductsRepository := repository.NewCustomizedProductsRepository()
+	customizedProductsRepository := repositories.NewCustomizedInMemoryProductsRepository()
+
+	productsService := services.NewProductService(productsRepository)
+	customizedProductsService := services.NewCustomizedProductService(customizedProductsRepository)
 
 	return &Resolver{
-		productsRepository: productsRepository,
+		productsService:           productsService,
+		customizedProductsService: customizedProductsService,
 	}
 }

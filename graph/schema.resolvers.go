@@ -20,7 +20,7 @@ func (r *mutationResolver) CreateCustomizedProduct(ctx context.Context, input mo
 
 // Products is the resolver for the products field.
 func (r *queryResolver) Products(ctx context.Context) ([]*model.Product, error) {
-	domainProducts, err := r.productsRepository.FindAll()
+	domainProducts, err := r.productsService.FindAll(ctx)
 
 	if err != nil {
 		return nil, gqlerror.Errorf("domainProducts not found error")
@@ -49,7 +49,7 @@ func (r *queryResolver) Products(ctx context.Context) ([]*model.Product, error) 
 
 // Product is the resolver for the product field.
 func (r *queryResolver) Product(ctx context.Context, id string) (*model.Product, error) {
-	domainProducts, err := r.productsRepository.FindAll()
+	domainProducts, err := r.productsService.FindAll(ctx)
 
 	if err != nil {
 		return nil, err
